@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>05_components_composing</title>
+</head>
+<body>
+
+  <div id="example"></div>
+
+  <script type="text/javascript" src="../js/react.development.js"></script>
+  <script type="text/javascript" src="../js/react-dom.development.js"></script>
+  <script type="text/javascript" src="../js/prop-types.js"></script>
+  <script type="text/javascript" src="../js/babel.min.js"></script>
+  <script type="text/babel">
+
+    class Toggle extends React.Component{
+        constructor(props){
+            super(props)
+            //初始化状态
+            this.state={
+                isToggleOn:true
+            }
+            this.handlerClick=this.handlerClick.bind(this)
+        }
+        handlerClick(){
+          const isToggleOn=!this.state.isToggleOn
+          this.setState({isToggleOn})
+        }
+
+        render(){
+            return(
+                <button onClick={this.handlerClick}>{this.state.isToggleOn?'ON':'OFF'}</button>
+            )
+        }
+    }
+
+    ReactDOM.render(<Toggle/>,document.getElementById('example'))
+  </script>
+</body>
+</html>

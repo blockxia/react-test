@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+<div id="box"></div>
+<script type="text/javascript" src="../js/react.development.js"></script>
+<script type="text/javascript" src="../js/react-dom.development.js"></script>
+<script type="text/javascript" src="../js/babel.min.js"></script>
+<script type="text/javascript" src="../js/prop-types.js"></script>
+<script type="text/babel">
+    class App extends React.Component{
+        constructor(props){
+            super(props)
+            this.state={
+                todos:['w','e','r']
+            }
+        }
+        addTodo=(todo)=>{
+            //读取原来的状态，用解构赋值方法
+           const  {todos}=this.state
+            //列表显示是在头部插入数据，所以用unshift
+            todos.unshift(todo)
+            this.setState({
+                todos
+            })
+        }
+        render(){
+            const {todos}=this.state
+            return (
+                <div>
+                    <Add addTodo={this.addTodo} size={todos.length}/>
+                    <List todos={todos}/>
+                </div>
+            )
+        }
+
+    }
+    class Add extends React.Component{
+        add=()=>{
+            const todo=this.refs.content.value.trim()
+            if(!todo) return
+
+            this.props.addTodo(todo)
+
+            this.refs.content.value=''
+        }
+        render(){
+            const {size}=this.props
+            return (
+                <div>
+                    <input type="text" ref="content"/>
+                    <button onClick={this.add}>Add #{size}</button>
+                </div>
+            )
+        }
+    }
+    Add.propTypes={
+        addTodo:PropTypes.func.isRequired,
+        size:PropTypes.number.isRequired
+    }
+    class List extends React.Component{
+
+       render(){
+           const {todos}=this.props//外部数据需要传入，也需要解构赋值的方法
+           return (
+               <ul>
+                   {todos.map((todo,index)=>{
+                       return <li key={index}>{todo}</li>
+                   })}
+               </ul>
+           )
+       }
+    }
+    List.propTypes={
+        todos:PropTypes.array.isRequired,
+
+    }
+    ReactDOM.render(<App/>,document.getElementById('box'))
+</script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>05_components_composing</title>
+</head>
+<body>
+
+  <div id="example"></div>
+
+  <script type="text/javascript" src="../js/react.development.js"></script>
+  <script type="text/javascript" src="../js/react-dom.development.js"></script>
+  <script type="text/javascript" src="../js/prop-types.js"></script>
+  <script type="text/javascript" src="../js/babel.min.js"></script>
+  <script type="text/babel">
+
+    class App extends React.Component{
+        constructor(props){
+            super(props)
+            //初始化状态
+            this.state={
+                todos:['抓猫','🐱 ','逗狗','🐶','养鱼']
+            }
+        }
+        addTodo=(todo)=>{
+            //得到原来的状态
+            const {todos}=this.state;
+            //产生新的状态
+            todos.unshift(todo)
+            //设置/更新状态
+            this.setState({
+                todos
+            })
+        }
+
+        render(){
+           const {todos}=this.state
+            return(
+                <div>
+                  <Add addTodo={this.addTodo} size={todos.length}/>
+                  <List todos={todos}/>
+                </div>
+            )
+        }
+    }
+    class Add extends React.Component{
+        add=()=>{
+//            1.读取输入的数据todo
+           const todo= this.refs.content.value.trim()
+            if(!todo){
+               return
+            }
+//            2.保存到todos中
+            this.props.addTodo(todo)
+//            3.清除输入
+            this.refs.content.value=''
+        }
+        render(){
+            const {size}=this.props
+            return(
+                   <div>
+                     <input type="text" ref="content"/>
+                     <button onClick={this.add}>Add #{size}</button>
+                   </div>
+
+            )
+        }
+    }
+    Add.propTypes={
+      addTodo:PropTypes.func.isRequired,
+        size:PropTypes.number.isRequired
+    }
+class List extends  React.Component{
+        render(){
+            const {todos}=this.props
+            return (
+                <ul>
+                    {todos.map((todo,index)=><li key={index}>{todo}</li>)}
+                </ul>
+            )
+        }
+}
+List.propTypes={
+        todos:PropTypes.array.isRequired
+}
+    ReactDOM.render(<App/>,document.getElementById('example'))
+  </script>
+</body>
+</html>
